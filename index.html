@@ -22,34 +22,36 @@
         </style>
 
 </head>
-<body class="bg-[#F8FAFC] pt-5">
+<body class="bg-[#F8FAFC] pt-5 overflow-x-hidden">
     
 
-<header class="">
+<header class="flex items-center justify-center min-h-screen p-4">
    
-        <fieldset class="fieldset  border-base-300 rounded-2xl shadow w-md border p-4 mx-auto space-y-4 ">
+        <fieldset class="fieldset border-base-300 rounded-2xl shadow border p-6 mx-auto space-y-4 w-full max-w-md bg-white ">
 
         <div class="text-center">
-            <img class="mx-auto" src="./assets/github-logo.png" alt="logo">
+            <img class="mx-auto w-12 mb-2" src="./assets/github-logo.png" alt="logo">
             <h2 class="text-2xl text-black font-bold">GitHub Issues Tracker</h2>
             <p class="text-[#64748B]">Sign in to manage your issues</p>
-        </div>
-        <!-- <legend class="fieldset-legend">Login</legend> -->
+        </div> 
+       
 
-        <label class="label">Username</label>
+        <label class="label text-sm font-medium mb-1 block">Username</label>
         <input id="username" type="text" class="input w-full" placeholder="Enter Username" />
 
         <label class="label">Password</label>
-        <input id="password" type="password" class="input w-full" placeholder="Enter Password" />
+        <input id="password" type="password" class="input input-bordered w-full" placeholder="Enter Password" />
 
-        <button onclick="goHome()" class="btn btn-primary mt-4">Sign in</button>
+        <button onclick="goHome()" class="btn btn-primary w-full mt-4">Sign in</button>
 
          <div class="w-full max-w-sm px-6 mx-auto">
-        <div class="relative flex py-5 items-center">
+
+            <div class="divider font-bold my-4">OR</div>
+        <!-- <div class="relative flex py-5 items-center">
             <div class="flex-grow border-t "></div>
             <span class="flex-shrink mx-4 text-gray-500 font-medium text-sm">OR</span>
             <div class="flex-grow border-t "></div>
-        </div>
+        </div> -->
 
         <div class="text-center mb-2">
             <p class="text-slate-500 text-sm font-medium">Demo Credentials:</p>
@@ -67,12 +69,24 @@
 
 
     </fieldset>
-
-
-   
-
-   
+ 
 </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script src="./script/script.js"></script>
 </body>
 
