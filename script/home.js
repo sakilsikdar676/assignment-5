@@ -21,7 +21,7 @@ myDiv2.innerHTML = `
               <img src="./assets/Aperture.png">
             </div>
             <div> 
-                <h2 class=" text-[18px] sm:text-lg font-bold">50 issues</h2>
+                <h2 id="issue-count" class=" text-[18px] sm:text-lg font-bold">50 issues</h2>
                 <p class=" hidden sm:inline-block text-[#64748B] ">Track and manage your project issues</p>
            </div>
        </div>
@@ -127,6 +127,18 @@ const displayIssues = (issues) => {
     const issuesContainer = document.querySelector("#issues-container");
     issuesContainer.innerHTML = "";
 
+
+
+
+
+
+
+
+
+
+
+
+
     issues.forEach(issue => {
         const issueDiv = document.createElement("div");
         issueDiv.classList.add("card")
@@ -136,6 +148,30 @@ const displayIssues = (issues) => {
         const getLabels = issue.labels.map(masrur =>
             `<span class="bg-yellow-200 text-red-500 text-xs font-bold px-3 py-1 rounded-full border border-red-100">${masrur}</span>`
         ).join("");
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       
         issueDiv.innerHTML = `
@@ -184,6 +220,38 @@ const displayIssues = (issues) => {
 </div>
         `;
         issuesContainer.appendChild(issueDiv);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -247,6 +315,8 @@ const singleIssue = () =>{
     .then(res => res.json())
     .then(data => {   
      allIssuesData=(data.data)
+
+    //  console.log(data.data);
         displayIssues(allIssuesData);
         })
 
@@ -257,19 +327,86 @@ singleIssue()
 
 // ebar proti ta button er kaj korte hobe
 
+
+
+
 document.getElementById("open").addEventListener("click", () => {
    
     const openIssues = allIssuesData.filter(issue => issue.status === "open");
    
+    const openCount = document.getElementById("issue-count");
+    if (openCount) {
+        openCount.innerText = `${openIssues.length} issues`;
+       
+        
+    }
+
     displayIssues(openIssues);
 });
 
 document.getElementById("closed").addEventListener("click", () => {
     const closedIssues = allIssuesData.filter(issue => issue.status === "closed");
+
+    const closedCount = document.getElementById("issue-count");
+    if (closedCount) {
+        closedCount.innerText = `${closedIssues.length} issues`;
+       
+        
+    }
+
     displayIssues(closedIssues);
 });
 
 document.getElementById("all").addEventListener("click", () => {
+
+     
+
+     const allCount = document.getElementById("issue-count");
+    if (allCount) {
+        allCount.innerText = `${allIssuesData.length} issues`;
+       
+        
+    }
     displayIssues(allIssuesData); 
 });
+
+
+
+
+
+ 
+    const countElement = document.getElementById("issue-count");
+    if (countElement) {
+        countElement.innerText = `${count} issues`;
+        console.log(countElement);
+        
+    }
+
+
+
+updateIssueCount(allIssuesData.length);
+
+
+ // ১. প্রথমেই স্পিনার দেখিয়ে দিন
+    issuesContainer.innerHTML = `
+        <div class="flex justify-center items-center py-20">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-emerald-500"></div>
+        </div>
+    `;
+
+    // ২. স্পিনারটি ইউজার যেন দেখতে পায়, তাই সামান্য দেরি করানো (যেমন ৩০০ মিলিসেকেন্ড)
+    setTimeout(() => {
+        issuesContainer.innerHTML = ""; // স্পিনার সরিয়ে ফেলা
+        
+        // কাউন্ট আপডেট করা
+        updateIssueCount(issues.length); 
+
+        // ৩. এবার আপনার আগের কার্ড রেন্ডার লজিক
+        issues.forEach(issue => {
+            const issueDiv = document.createElement("div");
+            // ...আপনার কার্ড তৈরির আগের কোডগুলো এখানে বসান...
+            issuesContainer.appendChild(issueDiv);
+        });
+    }, 300);
+
 
