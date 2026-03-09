@@ -75,37 +75,6 @@ const buttonSection = () => {
 buttonSection()
 
 
-// assignee
-// :
-// "jane_smith"
-// author
-// :
-// "john_doe"
-// createdAt
-// :
-// "2024-01-15T10:30:00Z"
-// description
-// :
-// "The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior."
-// id
-// :
-// 1
-// labels
-// :
-// (2)['bug', 'help wanted']
-// priority
-// :
-// "high"
-// status
-// :
-// "open"
-// title
-// :
-// "Fix navigation menu on mobile devices"
-// updatedAt
-// :
-// "2024-01-15T10:30:00Z"
-
 
 // api use kore issue load korte hobe
 
@@ -326,77 +295,63 @@ const singleIssue = () => {
 singleIssue()
 
 
-// ebar proti ta button er kaj korte hobe
-
-
-document.getElementById("open").addEventListener("click", () => {
-    
-showLoading(true);
-    const openIssues = allIssuesData.filter(issue => issue.status === "open");
-
-    const openCount = document.getElementById("issue-count");
-    if (openCount) {
-        openCount.innerText = `${openIssues.length} issues`;
-
-
-    }
-
-    displayIssues(openIssues);
-    showLoading(false);
-});
-
-document.getElementById("closed").addEventListener("click", () => {
-    showLoading(true);
-    const closedIssues = allIssuesData.filter(issue => issue.status === "closed");
-
-    const closedCount = document.getElementById("issue-count");
-    if (closedCount) {
-        closedCount.innerText = `${closedIssues.length} issues`;
-
-
-    }
-
-    displayIssues(closedIssues);
-     showLoading(false);
-});
-
-document.getElementById("all").addEventListener("click", () => {
-
-showLoading(true);
-
-    const allCount = document.getElementById("issue-count");
-    if (allCount) {
-        allCount.innerText = `${allIssuesData.length} issues`;
-
-
-    }
-    displayIssues(allIssuesData);
-     showLoading(false);
-});
-
+// ebar proti ta button er kaj korte  hobe ar loading add korte hobe
 
 
 const showLoading = (status) => {
     const loadingElement = document.getElementById("loading");
-    const issuesContainer = document.querySelector("#issues-container")
+    const issuesContainer = document.querySelector("#issues-container");
 
-    if(status === true){
+    if (!loadingElement || !issuesContainer) return; 
+
+    if (status) {
         issuesContainer.classList.add("hidden");
         loadingElement.classList.remove("hidden");
-    }
-    else{
+    } else {
         issuesContainer.classList.remove("hidden");
         loadingElement.classList.add("hidden");
     }
-    
-}
-// showLoading(true);
+};
 
+
+const clickFilter = (filterType) => {
+    showLoading(true);
+
+    setTimeout(() => {
+        try {
+            let filteredData;
+            
+           
+            if (filterType === 'all') {
+                filteredData = allIssuesData;
+            } else {
+                filteredData = allIssuesData.filter(issue => issue.status === filterType);
+            }
+
+           
+            const countElement = document.getElementById("issue-count");
+            if (countElement) {
+                countElement.innerText = `${filteredData.length} issues`;
+            }
+
+            
+            displayIssues(filteredData);
+            
+        } catch (error) {
+          
+        } finally {
+           
+            showLoading(false);
+        }
+    }, 500);
+};
+
+document.getElementById("open").addEventListener("click", () => clickFilter("open"));
+document.getElementById("closed").addEventListener("click", () => clickFilter("closed"));
+document.getElementById("all").addEventListener("click", () => clickFilter("all"));
 
 
 // sarch buttone er function toiri korbo
-
-
 
 document.getElementById("btn-sarch").addEventListener("click", () => {
     const input= document.getElementById("input-sarch");
