@@ -2,6 +2,7 @@
 
 const myDiv = document.createElement("div");
 const myDiv2 = document.createElement("div");
+
 myDiv.classList.add(
     "bg-white", "w-9/12", "mx-auto", "rounded-md", "p-5", "shadow-sm",
 )
@@ -44,8 +45,10 @@ myDiv2.innerHTML = `
    
    `
 
+
 document.querySelector("#div-container").appendChild(myDiv);
 document.querySelector("#div-container2").appendChild(myDiv2);
+
 
 
 // button section er function
@@ -112,10 +115,10 @@ const allIssues = () => {
         .then(res => res.json())
         .then(data => {
             displayIssues(data.data)
-            
-            
-})
-    
+
+
+        })
+
 
 }
 
@@ -128,17 +131,6 @@ const displayIssues = (issues) => {
     issuesContainer.innerHTML = "";
 
 
-
-
-
-
-
-
-
-
-
-
-
     issues.forEach(issue => {
         const issueDiv = document.createElement("div");
         issueDiv.classList.add("card")
@@ -149,34 +141,12 @@ const displayIssues = (issues) => {
             `<span class="bg-yellow-200 text-red-500 text-xs font-bold px-3 py-1 rounded-full border border-red-100">${masrur}</span>`
         ).join("");
 
+        const modalId = `my_modal_${issue.id}`;
 
 
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
         issueDiv.innerHTML = `
          
-        <div id="issue-${issue.id}" class=" div-card h-full bg-white border border-emerald-100 rounded-lg shadow-sm font-sans overflow-hidden ">
+        <div id="issue-${issue.id}" onclick="openMyModal('${modalId}')" class=" div-card h-full bg-white border border-emerald-100 rounded-lg shadow-sm font-sans overflow-hidden ">
             <div class="p-5">
               <div class="flex justify-between items-start mb-4">
                
@@ -219,49 +189,80 @@ const displayIssues = (issues) => {
   </div>
 </div>
         `;
+        const myDiv3 = document.createElement("div");
+
+
+
+        myDiv3.innerHTML = `
+ <dialog id="${modalId}" class="modal">
+  <div class="modal-box">
+
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-xl  ">
+  <h1 class="text-3xl font-bold text-gray-900 mb-3">${issue.title}</h1>
+  
+  <div class="flex items-center gap-2 text-sm text-gray-600 mb-4">
+    <span class="bg-green-500 text-white px-3 py-1 rounded-full font-medium text-xs">${issue.status}</span>
+    <span>•${issue.author}</span>
+    <span>•${issue.createdAt}</span>
+  </div>
+
+  <div class="flex gap-2 mb-6">
+    
+    <span class="flex items-center gap-1 border-yellow-200 text-yellow-700 px-2 py-0.5 rounded-md text-xs font-semibold ">
+       ${getLabels}
+    </span>
+  </div>
+
+  <p class="text-gray-700 mb-6">
+    ${issue.description}
+  </p>
+
+  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
+    <div>
+      <p class="text-sm text-gray-500">Assignee:</p>
+      <p class="font-semibold text-gray-900">${issue.assignee}</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-500">Priority:</p>
+      <span class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
+        ${issue.priority}
+      </span>
+    </div>
+  </div>
+</div>
+
+    <div class="modal-action">
+      <form method="dialog"> 
+        <!-- if there is a button in form, it will close the modal -->
+         <button class="btn btn-primary">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog> 
+   
+   `
+
+        document.querySelector("#modal-container").appendChild(myDiv3);
         issuesContainer.appendChild(issueDiv);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if (!window.openMyModal) {
+            window.openMyModal = function (id) {
+                const modal = document.getElementById(id);
+                if (modal) {
+                    modal.showModal();
+                }
+            }
+        }
 
 
 
 
         // id ta ke dhorlam
         issueDiv.id = `issue-${issue.id}`;
-      
-        
+
+
         let issuesSet = "";
-        
-    // ebar ekhane status check kore border and status upded korbo
+
+        // ebar ekhane status check kore border and status upded korbo
 
 
         if (issue.status == "open") {
@@ -276,13 +277,13 @@ const displayIssues = (issues) => {
             </span>
             </div>
             `
-            
+
         }
-          
-        else{
+
+        else {
             issueDiv.classList.add("border-t-3", "border-t-violet-500");
 
-              issuesSet = `
+            issuesSet = `
             <div class="flex items-center gap-2">
             <span>
             <img src="./assets/Closed-Status.png">
@@ -294,11 +295,11 @@ const displayIssues = (issues) => {
             `
         }
 
-    // ebar id er moddhe innerHTML set korbo
-const statusContainer = issueDiv.querySelector(`#status-placeholder-${issue.id}`);
-if (statusContainer) {
-    statusContainer.innerHTML = issuesSet;
-}
+        // ebar id er moddhe innerHTML set korbo
+        const statusContainer = issueDiv.querySelector(`#status-placeholder-${issue.id}`);
+        if (statusContainer) {
+            statusContainer.innerHTML = issuesSet;
+        }
     })
 
 
@@ -309,15 +310,15 @@ if (statusContainer) {
 allIssues()
 
 // api er data display te anar kaj niche korte hobe
-const singleIssue = () =>{
-    const singleUrl= `https://phi-lab-server.vercel.app/api/v1/lab/issues`;
+const singleIssue = () => {
+    const singleUrl = `https://phi-lab-server.vercel.app/api/v1/lab/issues`;
     fetch(singleUrl)
-    .then(res => res.json())
-    .then(data => {   
-     allIssuesData=(data.data)
+        .then(res => res.json())
+        .then(data => {
+            allIssuesData = (data.data)
 
-    //  console.log(data.data);
-        displayIssues(allIssuesData);
+            //  console.log(data.data);
+            displayIssues(allIssuesData);
         })
 
 }
@@ -331,82 +332,84 @@ singleIssue()
 
 
 document.getElementById("open").addEventListener("click", () => {
-   
+    
+showLoading(true);
     const openIssues = allIssuesData.filter(issue => issue.status === "open");
-   
+
     const openCount = document.getElementById("issue-count");
     if (openCount) {
         openCount.innerText = `${openIssues.length} issues`;
-       
-        
+
+
     }
 
     displayIssues(openIssues);
+    showLoading(false);
 });
 
 document.getElementById("closed").addEventListener("click", () => {
+    showLoading(true);
     const closedIssues = allIssuesData.filter(issue => issue.status === "closed");
 
     const closedCount = document.getElementById("issue-count");
     if (closedCount) {
         closedCount.innerText = `${closedIssues.length} issues`;
-       
-        
+
+
     }
 
     displayIssues(closedIssues);
+     showLoading(false);
 });
 
 document.getElementById("all").addEventListener("click", () => {
 
-     
+showLoading(true);
 
-     const allCount = document.getElementById("issue-count");
+    const allCount = document.getElementById("issue-count");
     if (allCount) {
         allCount.innerText = `${allIssuesData.length} issues`;
-       
-        
+
+
     }
-    displayIssues(allIssuesData); 
+    displayIssues(allIssuesData);
+     showLoading(false);
 });
 
 
 
+const showLoading = (status) => {
+    const loadingElement = document.getElementById("loading");
+    const issuesContainer = document.querySelector("#issues-container")
 
-
- 
-    const countElement = document.getElementById("issue-count");
-    if (countElement) {
-        countElement.innerText = `${count} issues`;
-        console.log(countElement);
-        
+    if(status === true){
+        issuesContainer.classList.add("hidden");
+        loadingElement.classList.remove("hidden");
     }
+    else{
+        issuesContainer.classList.remove("hidden");
+        loadingElement.classList.add("hidden");
+    }
+    
+}
+// showLoading(true);
 
 
 
-updateIssueCount(allIssuesData.length);
 
 
- // ১. প্রথমেই স্পিনার দেখিয়ে দিন
-    issuesContainer.innerHTML = `
-        <div class="flex justify-center items-center py-20">
-            <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-emerald-500"></div>
-        </div>
-    `;
 
-    // ২. স্পিনারটি ইউজার যেন দেখতে পায়, তাই সামান্য দেরি করানো (যেমন ৩০০ মিলিসেকেন্ড)
-    setTimeout(() => {
-        issuesContainer.innerHTML = ""; // স্পিনার সরিয়ে ফেলা
-        
-        // কাউন্ট আপডেট করা
-        updateIssueCount(issues.length); 
 
-        // ৩. এবার আপনার আগের কার্ড রেন্ডার লজিক
-        issues.forEach(issue => {
-            const issueDiv = document.createElement("div");
-            // ...আপনার কার্ড তৈরির আগের কোডগুলো এখানে বসান...
-            issuesContainer.appendChild(issueDiv);
-        });
-    }, 300);
+
+
+
+
+
+
+
+
+
+
+
 
 
