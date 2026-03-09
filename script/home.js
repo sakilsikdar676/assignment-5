@@ -329,8 +329,6 @@ singleIssue()
 // ebar proti ta button er kaj korte hobe
 
 
-
-
 document.getElementById("open").addEventListener("click", () => {
     
 showLoading(true);
@@ -396,20 +394,33 @@ const showLoading = (status) => {
 
 
 
+// sarch buttone er function toiri korbo
 
 
 
+document.getElementById("btn-sarch").addEventListener("click", () => {
+    const input= document.getElementById("input-sarch");
+    const sarchValue = input.value.trim().toLowerCase();
+    console.log(sarchValue);
 
 
+fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues?search=${sarchValue}`)
+.then(res => res.json())
+.then(data => {
+    const allData=(data.data);
+    displayIssues(allData);
+    // console.log(allData);
+
+    const filterData = allData.filter((data)=>{
+       return data.title.toLowerCase().includes(sarchValue);
+    })
 
 
+displayIssues(filterData);
 
-
-
-
-
-
-
+})
+   
+})
 
 
 
